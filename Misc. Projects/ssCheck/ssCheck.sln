@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ssCheck", "ssCheck\ssCheck.vcxproj", "{93F4D93C-77E9-4995-8875-2B605A234BAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93F4D93C-77E9-4995-8875-2B605A234BAA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{93F4D93C-77E9-4995-8875-2B605A234BAA}.Debug|Win32.Build.0 = Debug|Win32
+		{93F4D93C-77E9-4995-8875-2B605A234BAA}.Release|Win32.ActiveCfg = Release|Win32
+		{93F4D93C-77E9-4995-8875-2B605A234BAA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

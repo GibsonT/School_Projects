@@ -1,0 +1,935 @@
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.7).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the `#!/bin/sh' line above, then type `sh FILE'.
+#
+lock_dir=_sh11747
+# Made on 2015-02-07 19:07 EST by <n00921652@osprey.unfcsd.unf.edu>.
+# Source directory was `/home/52/n00921652/COP3601'.
+#
+# Existing files will *not* be overwritten, unless `-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#   7278 -rw-r--r-- p2
+#  12870 -rw-r--r-- p2.lst
+#   1116 -rw-r--r-- p2.obj
+#   3450 -rw-r--r-- sic.log
+#   1361 -rw-r--r-- doc
+#     38 -rw-r--r-- input
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=FAILED
+locale_dir=FAILED
+first_param="$1"
+for dir in $PATH
+do
+  if test "$gettext_dir" = FAILED && test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir ;;
+    esac
+  fi
+  if test "$locale_dir" = FAILED && test -f $dir/shar \
+     && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+  then
+    locale_dir=`$dir/shar --print-text-domain-dir`
+  fi
+done
+IFS="$save_IFS"
+if test "$locale_dir" = FAILED || test "$gettext_dir" = FAILED
+then
+  echo=echo
+else
+  TEXTDOMAINDIR=$locale_dir
+  export TEXTDOMAINDIR
+  TEXTDOMAIN=sharutils
+  export TEXTDOMAIN
+  echo="$gettext_dir/gettext -s"
+fi
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+   test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and'
+  ${echo} 'installing GNU `touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir}
+then : ; else ${echo} 'lock directory '${lock_dir}' exists'
+  exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} 'x - created lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to create lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+# ============= p2 ==============
+if test -f 'p2' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p2 (file already exists)'
+else
+${echo} 'x - extracting p2 (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p2' &&
+X.....................................
+X.   Travis Gibson
+X.   n00921652
+X.   COP3601
+X.   Project 2
+X.....................................
+X
+X        START   100
+X        J       BEGIN
+X
+INPUT   BYTE    X'F2'       .INPUT FILE TO READ
+INTS    RESW    10          .CAN HAVE UP TO 100 INTS IMPORTED FROM FILE
+TINTS   WORD    0           .TOTAL NUMBER OF INTS IN INPUT FILE
+PARIN   RESW    10          .10 WORDS RESERVED FOR PARSING INPUT
+ENDLP   WORD    30          .X SHOULDN'T SURPASS THIS AMOUNT WHEN PARSING LINE
+CHARCNT WORD    0           .NUMBER OF CHARS IN LINE
+LF      WORD    10          .ASCII FOR LINE FEED
+PERIOD  WORD    46          .ASCII FOR PERIOD (EOL INDICATOR)
+TERM    WORD    0           .TERM FOR A DIGIT OF A LINE
+ADIGIT  WORD    0           .ASCII VALUE OF CHARACTER IN LINE
+LINEPOS WORD    0           .LINE CHAR POSITION WHILE CONVERTING
+TEMP    WORD    0           .TEMPORARY STORE USED FOR FLIPPING
+SWAPEND WORD    0           .END MARKER FOR SWAPPING
+SWAPST  WORD    0           .BEGINNING MARKER FOR SWAPPING
+SWAPS   WORD    0           .NUMBER OF SWAPS TO PERFORM
+X
+X
+X..........
+X. ASCII VALUES FOR DIGITS 0-9 
+X..........
+AZERO   WORD    48
+AONE    WORD    49
+ATWO    WORD    50
+ATHREE  WORD    51
+AFOUR   WORD    52
+AFIVE   WORD    53
+ASIX    WORD    54
+ASEVEN  WORD    55
+AEIGHT  WORD    56
+ANINE   WORD    57
+X
+BEGIN   LDX     #0          .SET INDEX TO 0
+X        LDS     #0          .SET LINE CHARACTER COUNT TO 0
+X        LDA     #0          .SET A TO 0
+X
+X..........
+X. BEGIN READING INPUT FILE
+X..........
+READ    TD      INPUT       .TEST IF INPUT DEVICE IS READY
+X        JEQ     READ        .CONTINUE LOOPING UNTIL INPUT DEVICE IS READY
+X        RD      INPUT       .READ BYTE FROM INPUT
+X
+X        COMP    LF          .IS INPUT BYTE A LINE FEED?
+X        JEQ     INCTINT     .DONE READING LINE, CONVERT PARIN TO NUMBER
+X
+X        COMP    PERIOD      .IS INPUT BYTE A PERIOD?
+X        JEQ     REVERSE     .WE'RE DONE WITH THE FILE! BEGIN REVERSING THE LIST
+X        
+X        STA     PARIN,X     .STORE READ WORD INTO PARIN[X]
+X        LDA     #1
+X        ADDR    A,S         .INCREMENT LINE CHARACTER COUNT BY 1
+X        STS     CHARCNT     .STORE S IN CHARCNT
+X        TIX     ENDLP       .INCREMENT X BY 3 (PROBABLY BETTER WAY TO DO THIS, BUT IT WORKS FOR NOW)
+X        TIX     ENDLP
+X        TIX     ENDLP
+X        JLT     READ        .READ NEXT CHARACTER IN LINE
+X
+X. INITIALIZATION FOR CONVERTING LINE
+INCTINT LDA     TINTS       .LOAD TINTS INTO A
+X        ADD     #1          .ADD 1 TO A
+X        STA     TINTS       .STORE NEW VALUE INTO A
+X        SUB     #1          .SUBTRACT A BY 1 
+X        MUL     #3          .MULTIPLY BY ONE FOR PROPER OFFSET
+X        RMO     A,X         .LOAD A INTO X (TINTS - 1)
+X        LDA     INTS,X      .LOAD INTS[X] INTO A
+X        ADD     #1          .ADD 1 TO A (UNINITIALIZED VALUES START AT -1)
+X        STA     INTS,X      .STORE VALUE BACK INTO INTS[X]
+X        LDX     #0          .INITIALIZE X TO 0
+X        LDA     #0          .LOAD 0 INTO A
+X        STA     LINEPOS     .STORE 0 INTO LINEPOS, CLEARING IT OUT
+X
+CONVERT LDA     CHARCNT     .PLACE CHAR COUNT IN A
+X        SUB     #1          .DECREASE CHAR COUNT BY 1
+X        STA     CHARCNT     .PLACE BACK INTO CHARCNT
+X        LDS     CHARCNT     .LOAD CHARCNT INTO S
+X        COMP    #0          .IS A LESS THAN 0?
+X        JLT     BEGIN       .DONE CONVERTING NUMBER, START READING NEXT LINE
+X        LDA     PARIN,X     .COPY PARIN[X] INTO A
+X       
+X..........
+X. COMPARE AND ASSIGN DIGITS BASED ON ASCII VALUES
+X..........
+X        COMP    AZERO
+X        JEQ     ISZERO
+X        COMP    AONE
+X        JEQ     ISONE
+X        COMP    ATWO
+X        JEQ     ISTWO
+X        COMP    ATHREE
+X        JEQ     ISTHREE
+X        COMP    AFOUR
+X        JEQ     ISFOUR
+X        COMP    AFIVE
+X        JEQ     ISFIVE
+X        COMP    ASIX
+X        JEQ     ISSIX
+X        COMP    ASEVEN
+X        JEQ     ISSEVEN
+X        COMP    AEIGHT
+X        JEQ     ISEIGHT
+X        COMP    ANINE
+X        JEQ     ISNINE
+X
+ISZERO  LDA     #0
+X        J       MULTI
+ISONE   LDA     #1
+X        J       MULTI
+ISTWO   LDA     #2
+X        J       MULTI
+ISTHREE LDA     #3
+X        J       MULTI
+ISFOUR  LDA     #4
+X        J       MULTI
+ISFIVE  LDA     #5
+X        J       MULTI
+ISSIX   LDA     #6
+X        J       MULTI
+ISSEVEN LDA     #7
+X        J       MULTI
+ISEIGHT LDA     #8
+X        J       MULTI
+ISNINE  LDA     #9
+X        J       MULTI
+X
+X..........
+X. CALCULATE VALUE BASED ON DIGIT POSITION
+X..........
+X
+MULTI   STA     TERM    .STORE DIGIT IN A INTO TERM
+X
+X. MULTIPLIES NUMBER A SET NUMBER OF TIMES BASED ON POSITION
+EXPON   LDA     CHARCNT .LOAD STORED CHAR COUNT INTO A
+X        COMP    #0      .IS THE CHARCNT DOWN TO ZERO?
+X        JEQ     ADDDIGI .JUMP TO ADDDIGI
+X
+X        SUB     #1      .SUBTRACT 1 FROM A
+X        STA     CHARCNT .STORE NEW CHAR COUNT
+X        LDA     TERM    .BRING TERM BACK INTO A
+X        MUL     #10     .MULTIPLY A BY 10
+X        STA     TERM    .PLACE A BACK INTO TERM
+X        J       EXPON   .JUMP BACK UP AND MULTIPLY AGAIN
+X
+X. ADDS CALCULATED VALUE INTO INT POSITION
+ADDDIGI LDA     TINTS   .LOAD TINTS INTO A
+X        SUB     #1      .SUBTRACT BY 1
+X        MUL     #3      .MULTIPLY BY 3 FOR PROPER OFFSET
+X        RMO     A,X     .MOVE VALUE INTO X
+X        LDA     TERM    .BRING FINAL TERM BACK
+X        ADD     INTS,X  .ADD A INTO INTS[X]
+X        STA     INTS,X  .STORE A INTO INTS[X]
+X        STS     CHARCNT .PLACE S INTO CHARCNT
+X        LDA     LINEPOS .LOAD CURRENT LINE POSITION INTO A
+X        ADD     #3      .INCREMENT BY THREE
+X        STA     LINEPOS .STORE BACK INTO LINEPOS
+X        LDX     LINEPOS .LOAD VALUE INTO X
+X        J       CONVERT .CONVERT THE NEXT DIGIT
+X
+X..........
+X. REVERSE THE INT LIST
+X..........
+REVERSE LDA     TINTS   .LOAD TINTS INTO A
+X        DIV     #2      .DIVIDE BY TWO
+X        STA     SWAPS   .STORE RESULT INTO SWAPS
+X        LDA     TINTS   .LOAD TOTAL NUMBER OF INTS AGAIN
+X        SUB     #1      .SUBTRACT BY ONE...
+X        MUL     #3      . ...AND MULTIPLY BY 3 TO USE
+X        STA     SWAPEND .STORE THE VALUE FOR THE END POSITION
+X
+X. MAIN SWAPPING FUNCTION
+SWAP    LDX     SWAPST  .LOAD START POSITION INTO X
+X        LDA     INTS,X  .LOAD START INT[X] VALUE INTO A
+X        STA     TEMP    .STORE A INTO TEMP WORD
+X        LDX     SWAPEND .LOAD END POSITION INTO X
+X        LDA     INTS,X  .LOAD END INT[X] VALUE INTO A
+X        LDX     SWAPST  .LOAD START POSITION INTO X AGAIN
+X        STA     INTS,X  .STORE  END INT[X] VALUE INTO FRONT
+X        LDA     TEMP    .LOAD VALUE STORED IN TEMP INTO A
+X        LDX     SWAPEND .LOAD END POSITION BACK INTO X
+X        STA     INTS,X  .FINALLY, STORE TEMP VALUE INTO THE END POSITION
+X
+X        LDA     SWAPS   .LOAD NUMBER OF SWAPS
+X        SUB     #1      .SUBTRACT BY ONE
+X        STA     SWAPS   .STORE NEW VALUE BACK INTO SWAPS
+X        LDA     SWAPST  .LOAD START POSITION...
+X        ADD     #3      . ...AND MOVE IT TOWARD THE END
+X        STA     SWAPST  .SAVE IT BACK INTO SWAPST
+X        LDA     SWAPEND .LOAD END POSITION...
+X        SUB     #3      . ...AND MOVE IT TOWARD THE FRONT
+X        STA     SWAPEND .SAVE IT BACK INTO SWAPEND
+X
+X        LDA     SWAPS   .LOAD SWAPS VALUE AGAIN
+X        COMP    #0      .IS IT ZERO?
+X        JGT     SWAP    .IF IT'S NOT, CONTINUE SWAPPING. OTHERWISE, WE'RE DONE! HORRAY!
+X
+DONE    RSUB
+X        END
+SHAR_EOF
+  (set 20 15 02 07 18 44 49 'p2'; eval "$shar_touch") &&
+  chmod 0644 'p2'
+if test $? -ne 0
+then ${echo} 'restore of p2 failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p2: MD5 check failed'
+       ) << \SHAR_EOF
+e7f70c98c8dbf5df2531b99290dc0418  p2
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p2'` -ne 7278 && \
+  ${echo} 'restoration warning:  size of p2 is not 7278'
+  fi
+fi
+# ============= p2.lst ==============
+if test -f 'p2.lst' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p2.lst (file already exists)'
+else
+${echo} 'x - extracting p2.lst (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p2.lst' &&
+*********************************************
+University of North Florida: SIC/XE assembler
+version date 11/12/2002
+account: n00921652; Sat Feb  7 18:44:54 2015
+*********************************************
+ASSEMBLER REPORT
+----------------
+X     Loc   Object Code       Source Code
+X     ---   -----------       -----------
+001-                         .....................................
+002-                         .   Travis Gibson
+003-                         .   n00921652
+004-                         .   COP3601
+005-                         .   Project 2
+006-                         .....................................
+007- 00100                           START   100
+008- 00100 3F207F                    J       BEGIN
+009- 00103 F2                INPUT   BYTE    X'F2'       .INPUT FILE TO READ
+010- 00104                   INTS    RESW    10          .CAN HAVE UP TO 100 INTS IMPORTED FROM FILE
+011- 00122 000000            TINTS   WORD    0           .TOTAL NUMBER OF INTS IN INPUT FILE
+012- 00125                   PARIN   RESW    10          .10 WORDS RESERVED FOR PARSING INPUT
+013- 00143 00001E            ENDLP   WORD    30          .X SHOULDN'T SURPASS THIS AMOUNT WHEN PARSING LINE
+014- 00146 000000            CHARCNT WORD    0           .NUMBER OF CHARS IN LINE
+015- 00149 00000A            LF      WORD    10          .ASCII FOR LINE FEED
+016- 0014C 00002E            PERIOD  WORD    46          .ASCII FOR PERIOD (EOL INDICATOR)
+017- 0014F 000000            TERM    WORD    0           .TERM FOR A DIGIT OF A LINE
+018- 00152 000000            ADIGIT  WORD    0           .ASCII VALUE OF CHARACTER IN LINE
+019- 00155 000000            LINEPOS WORD    0           .LINE CHAR POSITION WHILE CONVERTING
+020- 00158 000000            TEMP    WORD    0           .TEMPORARY STORE USED FOR FLIPPING
+021- 0015B 000000            SWAPEND WORD    0           .END MARKER FOR SWAPPING
+022- 0015E 000000            SWAPST  WORD    0           .BEGINNING MARKER FOR SWAPPING
+023- 00161 000000            SWAPS   WORD    0           .NUMBER OF SWAPS TO PERFORM
+024-                         ..........
+025-                         . ASCII VALUES FOR DIGITS 0-9 
+026-                         ..........
+027- 00164 000030            AZERO   WORD    48
+028- 00167 000031            AONE    WORD    49
+029- 0016A 000032            ATWO    WORD    50
+030- 0016D 000033            ATHREE  WORD    51
+031- 00170 000034            AFOUR   WORD    52
+032- 00173 000035            AFIVE   WORD    53
+033- 00176 000036            ASIX    WORD    54
+034- 00179 000037            ASEVEN  WORD    55
+035- 0017C 000038            AEIGHT  WORD    56
+036- 0017F 000039            ANINE   WORD    57
+037- 00182 050000            BEGIN   LDX     #0          .SET INDEX TO 0
+038- 00185 6D0000                    LDS     #0          .SET LINE CHARACTER COUNT TO 0
+039- 00188 010000                    LDA     #0          .SET A TO 0
+040-                         ..........
+041-                         . BEGIN READING INPUT FILE
+042-                         ..........
+043- 0018B E32F75            READ    TD      INPUT       .TEST IF INPUT DEVICE IS READY
+044- 0018E 332FFA                    JEQ     READ        .CONTINUE LOOPING UNTIL INPUT DEVICE IS READY
+045- 00191 DB2F6F                    RD      INPUT       .READ BYTE FROM INPUT
+046- 00194 2B2FB2                    COMP    LF          .IS INPUT BYTE A LINE FEED?
+047- 00197 33201D                    JEQ     INCTINT     .DONE READING LINE, CONVERT PARIN TO NUMBER
+048- 0019A 2B2FAF                    COMP    PERIOD      .IS INPUT BYTE A PERIOD?
+049- 0019D 33210B                    JEQ     REVERSE     .WE'RE DONE WITH THE FILE! BEGIN REVERSING THE LIST
+050- 001A0 0FAF82                    STA     PARIN,X     .STORE READ WORD INTO PARIN[X]
+051- 001A3 010001                    LDA     #1
+052- 001A6 9004                      ADDR    A,S         .INCREMENT LINE CHARACTER COUNT BY 1
+053- 001A8 7F2F9B                    STS     CHARCNT     .STORE S IN CHARCNT
+054- 001AB 2F2F95                    TIX     ENDLP       .INCREMENT X BY 3 (PROBABLY BETTER WAY TO DO THIS, BUT IT WORKS FOR NOW)
+055- 001AE 2F2F92                    TIX     ENDLP
+056- 001B1 2F2F8F                    TIX     ENDLP
+057- 001B4 3B2FD4                    JLT     READ        .READ NEXT CHARACTER IN LINE
+058-                         . INITIALIZATION FOR CONVERTING LINE
+059- 001B7 032F68            INCTINT LDA     TINTS       .LOAD TINTS INTO A
+060- 001BA 190001                    ADD     #1          .ADD 1 TO A
+061- 001BD 0F2F62                    STA     TINTS       .STORE NEW VALUE INTO A
+062- 001C0 1D0001                    SUB     #1          .SUBTRACT A BY 1 
+063- 001C3 210003                    MUL     #3          .MULTIPLY BY ONE FOR PROPER OFFSET
+064- 001C6 AC01                      RMO     A,X         .LOAD A INTO X (TINTS - 1)
+065- 001C8 03AF39                    LDA     INTS,X      .LOAD INTS[X] INTO A
+066- 001CB 190001                    ADD     #1          .ADD 1 TO A (UNINITIALIZED VALUES START AT -1)
+067- 001CE 0FAF33                    STA     INTS,X      .STORE VALUE BACK INTO INTS[X]
+068- 001D1 050000                    LDX     #0          .INITIALIZE X TO 0
+069- 001D4 010000                    LDA     #0          .LOAD 0 INTO A
+070- 001D7 0F2F7B                    STA     LINEPOS     .STORE 0 INTO LINEPOS, CLEARING IT OUT
+071- 001DA 032F69            CONVERT LDA     CHARCNT     .PLACE CHAR COUNT IN A
+072- 001DD 1D0001                    SUB     #1          .DECREASE CHAR COUNT BY 1
+073- 001E0 0F2F63                    STA     CHARCNT     .PLACE BACK INTO CHARCNT
+074- 001E3 6F2F60                    LDS     CHARCNT     .LOAD CHARCNT INTO S
+075- 001E6 290000                    COMP    #0          .IS A LESS THAN 0?
+076- 001E9 3B2F96                    JLT     BEGIN       .DONE CONVERTING NUMBER, START READING NEXT LINE
+077- 001EC 03AF36                    LDA     PARIN,X     .COPY PARIN[X] INTO A
+078-                         ..........
+079-                         . COMPARE AND ASSIGN DIGITS BASED ON ASCII VALUES
+080-                         ..........
+081- 001EF 2B2F72                    COMP    AZERO
+082- 001F2 332036                    JEQ     ISZERO
+083- 001F5 2B2F6F                    COMP    AONE
+084- 001F8 332036                    JEQ     ISONE
+085- 001FB 2B2F6C                    COMP    ATWO
+086- 001FE 332036                    JEQ     ISTWO
+087- 00201 2B2F69                    COMP    ATHREE
+088- 00204 332036                    JEQ     ISTHREE
+089- 00207 2B2F66                    COMP    AFOUR
+090- 0020A 332036                    JEQ     ISFOUR
+091- 0020D 2B2F63                    COMP    AFIVE
+092- 00210 332036                    JEQ     ISFIVE
+093- 00213 2B2F60                    COMP    ASIX
+094- 00216 332036                    JEQ     ISSIX
+095- 00219 2B2F5D                    COMP    ASEVEN
+096- 0021C 332036                    JEQ     ISSEVEN
+097- 0021F 2B2F5A                    COMP    AEIGHT
+098- 00222 332036                    JEQ     ISEIGHT
+099- 00225 2B2F57                    COMP    ANINE
+100- 00228 332036                    JEQ     ISNINE
+101- 0022B 010000            ISZERO  LDA     #0
+102- 0022E 3F2036                    J       MULTI
+103- 00231 010001            ISONE   LDA     #1
+104- 00234 3F2030                    J       MULTI
+105- 00237 010002            ISTWO   LDA     #2
+106- 0023A 3F202A                    J       MULTI
+107- 0023D 010003            ISTHREE LDA     #3
+108- 00240 3F2024                    J       MULTI
+109- 00243 010004            ISFOUR  LDA     #4
+110- 00246 3F201E                    J       MULTI
+111- 00249 010005            ISFIVE  LDA     #5
+112- 0024C 3F2018                    J       MULTI
+113- 0024F 010006            ISSIX   LDA     #6
+114- 00252 3F2012                    J       MULTI
+115- 00255 010007            ISSEVEN LDA     #7
+116- 00258 3F200C                    J       MULTI
+117- 0025B 010008            ISEIGHT LDA     #8
+118- 0025E 3F2006                    J       MULTI
+119- 00261 010009            ISNINE  LDA     #9
+120- 00264 3F2000                    J       MULTI
+121-                         ..........
+122-                         . CALCULATE VALUE BASED ON DIGIT POSITION
+123-                         ..........
+124- 00267 0F2EE5            MULTI   STA     TERM    .STORE DIGIT IN A INTO TERM
+125-                         . MULTIPLIES NUMBER A SET NUMBER OF TIMES BASED ON POSITION
+126- 0026A 032ED9            EXPON   LDA     CHARCNT .LOAD STORED CHAR COUNT INTO A
+127- 0026D 290000                    COMP    #0      .IS THE CHARCNT DOWN TO ZERO?
+128- 00270 332012                    JEQ     ADDDIGI .JUMP TO ADDDIGI
+129- 00273 1D0001                    SUB     #1      .SUBTRACT 1 FROM A
+130- 00276 0F2ECD                    STA     CHARCNT .STORE NEW CHAR COUNT
+131- 00279 032ED3                    LDA     TERM    .BRING TERM BACK INTO A
+132- 0027C 21000A                    MUL     #10     .MULTIPLY A BY 10
+133- 0027F 0F2ECD                    STA     TERM    .PLACE A BACK INTO TERM
+134- 00282 3F2FE5                    J       EXPON   .JUMP BACK UP AND MULTIPLY AGAIN
+135-                         . ADDS CALCULATED VALUE INTO INT POSITION
+136- 00285 032E9A            ADDDIGI LDA     TINTS   .LOAD TINTS INTO A
+137- 00288 1D0001                    SUB     #1      .SUBTRACT BY 1
+138- 0028B 210003                    MUL     #3      .MULTIPLY BY 3 FOR PROPER OFFSET
+139- 0028E AC01                      RMO     A,X     .MOVE VALUE INTO X
+140- 00290 032EBC                    LDA     TERM    .BRING FINAL TERM BACK
+141- 00293 1BAE6E                    ADD     INTS,X  .ADD A INTO INTS[X]
+142- 00296 0FAE6B                    STA     INTS,X  .STORE A INTO INTS[X]
+143- 00299 7F2EAA                    STS     CHARCNT .PLACE S INTO CHARCNT
+144- 0029C 032EB6                    LDA     LINEPOS .LOAD CURRENT LINE POSITION INTO A
+145- 0029F 190003                    ADD     #3      .INCREMENT BY THREE
+146- 002A2 0F2EB0                    STA     LINEPOS .STORE BACK INTO LINEPOS
+147- 002A5 072EAD                    LDX     LINEPOS .LOAD VALUE INTO X
+148- 002A8 3F2F2F                    J       CONVERT .CONVERT THE NEXT DIGIT
+149-                         ..........
+150-                         . REVERSE THE INT LIST
+151-                         ..........
+152- 002AB 032E74            REVERSE LDA     TINTS   .LOAD TINTS INTO A
+153- 002AE 250002                    DIV     #2      .DIVIDE BY TWO
+154- 002B1 0F2EAD                    STA     SWAPS   .STORE RESULT INTO SWAPS
+155- 002B4 032E6B                    LDA     TINTS   .LOAD TOTAL NUMBER OF INTS AGAIN
+156- 002B7 1D0001                    SUB     #1      .SUBTRACT BY ONE...
+157- 002BA 210003                    MUL     #3      . ...AND MULTIPLY BY 3 TO USE
+158- 002BD 0F2E9B                    STA     SWAPEND .STORE THE VALUE FOR THE END POSITION
+159-                         . MAIN SWAPPING FUNCTION
+160- 002C0 072E9B            SWAP    LDX     SWAPST  .LOAD START POSITION INTO X
+161- 002C3 03AE3E                    LDA     INTS,X  .LOAD START INT[X] VALUE INTO A
+162- 002C6 0F2E8F                    STA     TEMP    .STORE A INTO TEMP WORD
+163- 002C9 072E8F                    LDX     SWAPEND .LOAD END POSITION INTO X
+164- 002CC 03AE35                    LDA     INTS,X  .LOAD END INT[X] VALUE INTO A
+165- 002CF 072E8C                    LDX     SWAPST  .LOAD START POSITION INTO X AGAIN
+166- 002D2 0FAE2F                    STA     INTS,X  .STORE  END INT[X] VALUE INTO FRONT
+167- 002D5 032E80                    LDA     TEMP    .LOAD VALUE STORED IN TEMP INTO A
+168- 002D8 072E80                    LDX     SWAPEND .LOAD END POSITION BACK INTO X
+169- 002DB 0FAE26                    STA     INTS,X  .FINALLY, STORE TEMP VALUE INTO THE END POSITION
+170- 002DE 032E80                    LDA     SWAPS   .LOAD NUMBER OF SWAPS
+171- 002E1 1D0001                    SUB     #1      .SUBTRACT BY ONE
+172- 002E4 0F2E7A                    STA     SWAPS   .STORE NEW VALUE BACK INTO SWAPS
+173- 002E7 032E74                    LDA     SWAPST  .LOAD START POSITION...
+174- 002EA 190003                    ADD     #3      . ...AND MOVE IT TOWARD THE END
+175- 002ED 0F2E6E                    STA     SWAPST  .SAVE IT BACK INTO SWAPST
+176- 002F0 032E68                    LDA     SWAPEND .LOAD END POSITION...
+177- 002F3 1D0003                    SUB     #3      . ...AND MOVE IT TOWARD THE FRONT
+178- 002F6 0F2E62                    STA     SWAPEND .SAVE IT BACK INTO SWAPEND
+179- 002F9 032E65                    LDA     SWAPS   .LOAD SWAPS VALUE AGAIN
+180- 002FC 290000                    COMP    #0      .IS IT ZERO?
+181- 002FF 372FBE                    JGT     SWAP    .IF IT'S NOT, CONTINUE SWAPPING. OTHERWISE, WE'RE DONE! HORRAY!
+182- 00302 4F0000            DONE    RSUB
+183- 00305                           END
+SHAR_EOF
+  (set 20 15 02 07 18 44 54 'p2.lst'; eval "$shar_touch") &&
+  chmod 0644 'p2.lst'
+if test $? -ne 0
+then ${echo} 'restore of p2.lst failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p2.lst: MD5 check failed'
+       ) << \SHAR_EOF
+6e85b659abb48ef845dfc0157d7a0896  p2.lst
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p2.lst'` -ne 12870 && \
+  ${echo} 'restoration warning:  size of p2.lst is not 12870'
+  fi
+fi
+# ============= p2.obj ==============
+if test -f 'p2.obj' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING p2.obj (file already exists)'
+else
+${echo} 'x - extracting p2.obj (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'p2.obj' &&
+000100
+000000
+3F207F
+F2
+!
+000122
+000000
+000000
+!
+000143
+000100
+00001E
+000000
+00000A
+00002E
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000030
+000031
+000032
+000033
+000034
+000035
+000036
+000037
+000038
+000039
+050000
+6D0000
+010000
+E32F75
+332FFA
+DB2F6F
+2B2FB2
+33201D
+2B2FAF
+33210B
+0FAF82
+010001
+9004
+7F2F9B
+2F2F95
+2F2F92
+2F2F8F
+3B2FD4
+032F68
+190001
+0F2F62
+1D0001
+210003
+AC01
+03AF39
+190001
+0FAF33
+050000
+010000
+0F2F7B
+032F69
+1D0001
+0F2F63
+6F2F60
+290000
+3B2F96
+03AF36
+2B2F72
+332036
+2B2F6F
+332036
+2B2F6C
+332036
+2B2F69
+332036
+2B2F66
+332036
+2B2F63
+332036
+2B2F60
+332036
+2B2F5D
+332036
+2B2F5A
+332036
+2B2F57
+332036
+010000
+3F2036
+010001
+3F2030
+010002
+3F202A
+010003
+3F2024
+010004
+3F201E
+010005
+3F2018
+010006
+3F2012
+010007
+3F200C
+010008
+3F2006
+010009
+3F2000
+0F2EE5
+032ED9
+290000
+332012
+1D0001
+0F2ECD
+032ED3
+21000A
+0F2ECD
+3F2FE5
+032E9A
+1D0001
+210003
+AC01
+032EBC
+1BAE6E
+0FAE6B
+7F2EAA
+032EB6
+190003
+0F2EB0
+072EAD
+3F2F2F
+032E74
+250002
+0F2EAD
+032E6B
+1D0001
+210003
+0F2E9B
+072E9B
+03AE3E
+0F2E8F
+072E8F
+03AE35
+072E8C
+0FAE2F
+032E80
+072E80
+0FAE26
+032E80
+1D0001
+0F2E7A
+032E74
+190003
+0F2E6E
+032E68
+1D0003
+0F2E62
+032E65
+290000
+372FBE
+4F0000
+!
+SHAR_EOF
+  (set 20 15 02 07 18 44 54 'p2.obj'; eval "$shar_touch") &&
+  chmod 0644 'p2.obj'
+if test $? -ne 0
+then ${echo} 'restore of p2.obj failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'p2.obj: MD5 check failed'
+       ) << \SHAR_EOF
+7a2d576ddcdc40413ce48a7da1679c03  p2.obj
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'p2.obj'` -ne 1116 && \
+  ${echo} 'restoration warning:  size of p2.obj is not 1116'
+  fi
+fi
+# ============= sic.log ==============
+if test -f 'sic.log' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING sic.log (file already exists)'
+else
+${echo} 'x - extracting sic.log (binary)'
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 sic.log
+M4TE#(%-)355,051/4B!6,2XV"D9I;&4@;F%M97,@87)E.@IL;V%D97(@("`@
+M("`@("`@("`@("`@("`@("`@("`@("`@("`@("`*1$561C$@("`@("`@("`@
+M("`@("`@("`@("`@("`@("`@("`@("`@"D1%5D8R("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@("`@("`@(`I$159&,R`@("`@("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@("`*1$56,#0@("`@("`@("`@("`@("`@("`@("`@("`@
+M("`@("`@("`@"D1%5C`U("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@
+M("`@(`I$158P-B`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`*
+M0T]-34%.1#H@02A#0T505"!F:6QE(&YA;65S+"!2*$5.04U%(#$@;W(@;6]R
+M92!F:6QE<PIR"FQO861E<B`@("`@("`@("`@("`@("`@("`@("`@("`@("`@
+M("`@(`I$159&,2`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`*
+M<#(N;V)J"D1%5D8R("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@
+M(`II;G!U=`I$159&,R`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@
+M("`*1$56,#0@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@"D1%
+M5C`U("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(`I$158P-B`@
+M("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`*1FEL92!N86UE<R!A
+M<F4Z"FQO861E<B`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@(`IP
+M,BYO8FH@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`*:6YP=70@
+M("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@("`@"D1%5D8S("`@("`@
+M("`@("`@("`@("`@("`@("`@("`@("`@("`@(`I$158P-"`@("`@("`@("`@
+M("`@("`@("`@("`@("`@("`@("`@("`*1$56,#4@("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@("`@("`@"D1%5C`V("`@("`@("`@("`@("`@("`@("`@
+M("`@("`@("`@("`@(`I#3TU-04Y$.B!!*$-#15!4(&9I;&4@;F%M97,L(%(H
+M14Y!344@,2!O<B!M;W)E(&9I;&5S"F$*"D-/34U!3D0Z(%,H5$%25"P@4BA5
+M3BP@12A.5$52+"!$*%5-4"P@2"A#3U5.5"P@0BA+4%0L($8H24Q%4RP@5"A2
+M04-%+"!1*%5)5#\*<PH*0T]-34%.1#H@4RA405)4+"!2*%5.+"!%*$Y415(L
+M($0H54U0+"!(*$-/54Y4+"!"*$M05"P@1BA)3$53+"!4*%)!0T4L(%$H54E4
+M/PIB(#)A8@H*0T]-34%.1#H@4RA405)4+"!2*%5.+"!%*$Y415(L($0H54U0
+M+"!(*$-/54Y4+"!"*$M05"P@1BA)3$53+"!4*%)!0T4L(%$H54E4/PIH(#DY
+M.3D*"D-/34U!3D0Z(%,H5$%25"P@4BA53BP@12A.5$52+"!$*%5-4"P@2"A#
+M3U5.5"P@0BA+4%0L($8H24Q%4RP@5"A204-%+"!1*%5)5#\*<@H@(#DY.3D@
+M24Y35%)50U1)3TY3($5814-55$5$"E`],#`P,#8U"@I#3TU-04Y$.B!3*%1!
+M4E0L(%(H54XL($4H3E1%4BP@1"A535`L($@H0T]53E0L($(H2U!4+"!&*$E,
+M15,L(%0H4D%#12P@42A5250_"G(*("`Y.3DY($E.4U1254-424].4R!%6$5#
+M551%1`I0/3`P,#`T.`H*0T]-34%.1#H@4RA405)4+"!2*%5.+"!%*$Y415(L
+M($0H54U0+"!(*$-/54Y4+"!"*$M05"P@1BA)3$53+"!4*%)!0T4L(%$H54E4
+M/PIR"D)214%+4$])3E0@4D5!0TA%1`I0/3`P,#)!0@H*0T]-34%.1#H@4RA4
+M05)4+"!2*%5.+"!%*$Y415(L($0H54U0+"!(*$-/54Y4+"!"*$M05"P@1BA)
+M3$53+"!4*%)!0T4L(%$H54E4/PID(#$P,"TR,#`*"C`Q,#`@,T8R,#=&1C(@
+M,#`P,#)%,#`@,#,R-3`P,#`@,C`P,#`P,$4*,#$Q,"`P,#`P-$,P,"`P,#)"
+M,#`P,"`T1#`P,#`P02`P,#`P-C0P,0HP,3(P(#A!.3(P,#`P(#!!,#`P,#,Q
+M(#`P,#`S,#`P(#`P,S$P,#`P"C`Q,S`@,S`P,#`P,S$@,#`P,#,P1D8@1D9&
+M1D9&1D8@1D9&1D9&1D8*,#$T,"!&1D9&1D8P,"`P,#%%1D9&1B!&1C`P,#`P
+M02`P,#`P,D4P,`HP,34P(#`P,#`P,#`P(#`P,#`P,#$R(#`P,#`P,#`P(#`P
+M,#`P,#`P"C`Q-C`@,#`P,#`P,#`@,#`P,#,P,#`@,#`S,3`P,#`@,S(P,#`P
+M,S,*,#$W,"`P,#`P,S0P,"`P,#,U,#`P,"`S-C`P,#`S-R`P,#`P,S@P,`HP
+M,3@P(#`P,SDP-3`P(#`P-D0P,#`P(#`Q,#`P,$4S(#)&-S4S,S)&"C`Q.3`@
+M1D%$0C)&-D8@,D(R1D(R,S,@,C`Q1#)",D8@048S,S(Q,$(*,#%!,"`P1D%&
+M.#(P,2`P,#`Q.3`P-"`W1C)&.4(R1B`R1CDU,D8R1@HP,4(P(#DR,D8R1CA&
+M(#-",D9$-#`S(#)&-C@Q.3`P(#`Q,$8R1C8R"C`Q0S`@,40P,#`Q,C$@,#`P
+M,T%#,#$@,#-!1C,Y,3D@,#`P,3!&048*,#%$,"`S,S`U,#`P,"`P,3`P,#`P
+M1B`R1C=",#,R1B`V.3%$,#`P,0HP,44P(#!&,D8V,S9&(#)&-C`R.3`P(#`P
+M,T(R1CDV(#`S048S-C)""C`Q1C`@,D8W,C,S,C`@,S8R0C)&-D8@,S,R,#,V
+M,D(@,D8V0S,S,C`*,#(P,"`S-C)",D8V.2`S,S(P,S8R0B`R1C8V,S,R,"`S
+M-C)",D8V,PH*0T]-34%.1#H@4RA405)4+"!2*%5.+"!%*$Y415(L($0H54U0
+M+"!(*$-/54Y4+"!"*$M05"P@1BA)3$53+"!4*%)!0T4L(%$H54E4/PIB(#,P
+M,@H*0T]-34%.1#H@4RA405)4+"!2*%5.+"!%*$Y415(L($0H54U0+"!(*$-/
+M54Y4+"!"*$M05"P@1BA)3$53+"!4*%)!0T4L(%$H54E4/PIR"D)214%+4$])
+M3E0@4D5!0TA%1`I0/3`P,#,P,@H*0T]-34%.1#H@4RA405)4+"!2*%5.+"!%
+M*$Y415(L($0H54U0+"!(*$-/54Y4+"!"*$M05"P@1BA)3$53+"!4*%)!0T4L
+M(%$H54E4/PID(#$P,"TR,#`*"C`Q,#`@,T8R,#=&1C(@,#$X03DR,#`@,#`V
+M-#`P,#`@,$$P,#`P-$0*,#$Q,"`P,#`P,D(P,"`P,#1#,#`P,"`P13`P,#`R
+M,"`P,#`S,C4P,`HP,3(P(#`P,D4P,#`P(#!!,#`P,#,Q(#`P,#`S,#`P(#`P
+M,S$P,#`P"C`Q,S`@,S`P,#`P,S$@,#`P,#,P1D8@1D9&1D9&1D8@1D9&1D9&
+M1D8*,#$T,"!&1D9&1D8P,"`P,#%%1D9&1B!&1C`P,#`P02`P,#`P,D4P,`HP
+M,34P(#`P,#`P,#`P(#`P,#`P,#$R(#`P,#`T0S`P(#`P,$,P,#`P"C`Q-C`@
+M,$8P,#`P,#`@,#`P,#,P,#`@,#`S,3`P,#`@,S(P,#`P,S,*,#$W,"`P,#`P
+M,S0P,"`P,#,U,#`P,"`S-C`P,#`S-R`P,#`P,S@P,`HP,3@P(#`P,SDP-3`P
+M(#`P-D0P,#`P(#`Q,#`P,$4S(#)&-S4S,S)&"C`Q.3`@1D%$0C)&-D8@,D(R
+M1D(R,S,@,C`Q1#)",D8@048S,S(Q,$(*,#%!,"`P1D%&.#(P,2`P,#`Q.3`P
+M-"`W1C)&.4(R1B`R1CDU,D8R1@HP,4(P(#DR,D8R1CA&(#-",D9$-#`S(#)&
+M-C@Q.3`P(#`Q,$8R1C8R"C`Q0S`@,40P,#`Q,C$@,#`P,T%#,#$@,#-!1C,Y
+M,3D@,#`P,3!&048*,#%$,"`S,S`U,#`P,"`P,3`P,#`P1B`R1C=",#,R1B`V
+M.3%$,#`P,0HP,44P(#!&,D8V,S9&(#)&-C`R.3`P(#`P,T(R1CDV(#`S048S
+M-C)""C`Q1C`@,D8W,C,S,C`@,S8R0C)&-D8@,S,R,#,V,D(@,D8V0S,S,C`*
+M,#(P,"`S-C)",D8V.2`S,S(P,S8R0B`R1C8V,S,R,"`S-C)",D8V,PH*0T]-
+M34%.1#H@4RA405)4+"!2*%5.+"!%*$Y415(L($0H54U0+"!(*$-/54Y4+"!"
+>*$M05"P@1BA)3$53+"!4*%)!0T4L(%$H54E4/PIQ
+`
+end
+SHAR_EOF
+  (set 20 15 02 07 18 48 42 'sic.log'; eval "$shar_touch") &&
+  chmod 0644 'sic.log'
+if test $? -ne 0
+then ${echo} 'restore of sic.log failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'sic.log: MD5 check failed'
+       ) << \SHAR_EOF
+49d8b4aeae3c4b948ac4288d4116bf5b  sic.log
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'sic.log'` -ne 3450 && \
+  ${echo} 'restoration warning:  size of sic.log is not 3450'
+  fi
+fi
+# ============= doc ==============
+if test -f 'doc' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING doc (file already exists)'
+else
+${echo} 'x - extracting doc (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'doc' &&
+Travis Gibson
+n00921652
+COP3601, System Software
+Project 2
+X
+X    The purpose of this project is to create a SIC or SIC/XE program that takes
+in 10 integers and flips their order. I implemented the ability to
+insert a list via an input file. This file contains an arbitrary list of
+integers, each separated by a newline. When done inputting numbers in the
+file, there should be a period at the end. 
+X
+Example input:
+X~~~~~~
+1
+2
+3
+23
+43
+100
+X.
+X~~~~~~
+X
+X    The limit is hard coded to 10 integers with a 10 digit limit, but
+this may easily be edited within the source file by editing the
+TINTS, PARIN, and ENDLP variables. This was achieved
+by reading each line byte by byte, converting the ASCII value to
+a read digit. Each digit is multiplied by 10 a number of times
+based on its position in the line, and then added to the
+total for that line.
+X
+X    For reversing the list, I essentialy just used a temporary
+variable as a holder, much like one would do in C. I then 
+transverse the list using two markers that move back from the front,
+and toward the front from the back, and swap the integers where the
+markers are at. The markers are then incremented/decremented once each
+iteration.
+X
+X    The list of integers are stored in memory locations 104-122, and in
+sic.log, I have two dumps from 100-200 showing the contents of the memory
+both before and after the swap.
+SHAR_EOF
+  (set 20 15 02 07 19 06 42 'doc'; eval "$shar_touch") &&
+  chmod 0644 'doc'
+if test $? -ne 0
+then ${echo} 'restore of doc failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'doc: MD5 check failed'
+       ) << \SHAR_EOF
+4905c4aacff1107226947e3587c2ed19  doc
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'doc'` -ne 1361 && \
+  ${echo} 'restoration warning:  size of doc is not 1361'
+  fi
+fi
+# ============= input ==============
+if test -f 'input' && test "$first_param" != -c; then
+  ${echo} 'x -SKIPPING input (file already exists)'
+else
+${echo} 'x - extracting input (text)'
+  sed 's/^X//' << 'SHAR_EOF' > 'input' &&
+46
+805
+32
+14
+76
+43
+77
+10
+100
+101010
+X.
+SHAR_EOF
+  (set 20 15 02 07 18 42 46 'input'; eval "$shar_touch") &&
+  chmod 0644 'input'
+if test $? -ne 0
+then ${echo} 'restore of input failed'
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'input: MD5 check failed'
+       ) << \SHAR_EOF
+409ed127826ce3a4dd9c442ae72ad486  input
+SHAR_EOF
+  else
+test `LC_ALL=C wc -c < 'input'` -ne 38 && \
+  ${echo} 'restoration warning:  size of input is not 38'
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} 'x - removed lock directory `'${lock_dir}\''.'
+else ${echo} 'x - failed to remove lock directory `'${lock_dir}\''.'
+  exit 1
+fi
+exit 0

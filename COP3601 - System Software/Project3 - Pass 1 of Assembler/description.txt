@@ -1,0 +1,54 @@
+For this project you are to implement pass 1 of the assembler.
+
+Pass 1 should construct the symbol table, the addresses associated
+with each instruction, addresses of each label. The input file will be
+in fixed format:
+
+Col 1-8    label optional
+Col 9      blank
+Col 10     + optional
+Col 11-17  mneumonic
+Col 18     blank
+Col 19     #, @, =  ... optional
+Col 20-29  (operand) label, register, ',',X optional  ...
+Col 30-31  blank
+Col 32-80  comments optional (NO PERIOD REQUIRED)
+
+There may be blank lines in the source file.
+Your project should report the listing and the contents of the symbol
+table to the screen. Your project should assemble all of SIC/XE and be
+equivalent to sicasm. Extra credit will be awarded for additional
+features currently not included in sicasm such as EQU, CSECT, USE,
+ etc. All test files will be entered in upper case. Appropriate
+error conditions such as duplicately defined labels or undefined labels.
+Invalid mneumonics should be ignored in maintaining your addresses and
+your assembler should continue processing. All appropriate errors must
+be reported including invalid mneumonics. You should anticipate
+project 4 as pass two, thus you might, in the design of pass 1,
+consider pass 2.
+
+
+I will enter make to compile your project that should create
+an executables called p3. I will invoke your program with 
+ 
+p3 fn
+
+where fn is any name of a file containing the data as
+described above. p3 may be a script name that will run your java
+file, perl, python, ruby, or what ever language you chose. 
+Your project should generate output written to the screen.
+
+
+Use turnin 
+
+   turnin fn ree3404_3
+
+where fn is the name of your shar file created as follows
+
+   shar pgm.c makefile doc otherfiles > fn
+
+You may include any other files as you desire in your shar. Be sure
+to test the integrity of your shar. 
+
+NOTE: The turnin date will be 2 days later than the on time
+date of the project. This allows for 2 day late projects.

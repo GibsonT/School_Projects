@@ -1,0 +1,5 @@
+toolsets = gnu;
+program assignment7 {
+	sources { breadthFirstSearch.c createAdjList.c depthFirstSearch.c graph.h main.c queueGetFront.c
+				queueInsert.c queuePeekFront.c stackPeek.c stackPop.c stackPush.c topoSort.c }
+}

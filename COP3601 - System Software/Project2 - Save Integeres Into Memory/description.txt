@@ -1,0 +1,45 @@
+For this project you are to create a SIC or SIC/XE program that
+will have 10 integers initialized in memory via WORD storage.
+
+You should report in your documentation (or sic.log) the location of
+the 10 integers. The task is to reverse the integers. You can show
+the original list and reversed list of integer that appears using 
+the d command in sicsim.  For example, if the integers were
+
+93 50 197 55 96 65 74 92 43 8
+
+you would report:
+
+8 43 92 74 65 96 55 197 50 93
+
+You should show the location of each list by editing sic.log
+
+Your program should be general enough so that, by making only a couple
+minor modifications, I could use more than 10 integers.
+
+For 5 extra credit points, read in the integers rather than 
+code them in the program.
+
+Use turnin 
+
+   turnin fn ree3404_2
+
+where fn is the name of your shar file created as follows
+
+   shar t doc t.lst t.obj sic.log > fn
+
+Assume your source file is called t. 
+
+sic.log should show appropriate dumps indicating the desired results
+above.
+
+You may include any other files as you desire in your shar. Be sure
+to test the integrity of your shar by creating a new directory,
+copying your shar file to the new directory, unsharing the project. 
+Only after this testing procedure has been accomplished should you 
+turnin your project. 
+
+NOTE: The turnin date reported by turnin -d ree3404_2 will be the 
+2 day late deadline rather than the on time date of the project. 
+This allows for 2 day late projects. Use the date on the top of this
+file for the ON TIME date.

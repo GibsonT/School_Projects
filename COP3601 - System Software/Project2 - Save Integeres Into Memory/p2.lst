@@ -1,0 +1,192 @@
+*********************************************
+University of North Florida: SIC/XE assembler
+version date 11/12/2002
+account: n00921652; Sat Feb  7 18:44:54 2015
+*********************************************
+ASSEMBLER REPORT
+----------------
+     Loc   Object Code       Source Code
+     ---   -----------       -----------
+001-                         .....................................
+002-                         .   Travis Gibson
+003-                         .   n00921652
+004-                         .   COP3601
+005-                         .   Project 2
+006-                         .....................................
+007- 00100                           START   100
+008- 00100 3F207F                    J       BEGIN
+009- 00103 F2                INPUT   BYTE    X'F2'       .INPUT FILE TO READ
+010- 00104                   INTS    RESW    10          .CAN HAVE UP TO 100 INTS IMPORTED FROM FILE
+011- 00122 000000            TINTS   WORD    0           .TOTAL NUMBER OF INTS IN INPUT FILE
+012- 00125                   PARIN   RESW    10          .10 WORDS RESERVED FOR PARSING INPUT
+013- 00143 00001E            ENDLP   WORD    30          .X SHOULDN'T SURPASS THIS AMOUNT WHEN PARSING LINE
+014- 00146 000000            CHARCNT WORD    0           .NUMBER OF CHARS IN LINE
+015- 00149 00000A            LF      WORD    10          .ASCII FOR LINE FEED
+016- 0014C 00002E            PERIOD  WORD    46          .ASCII FOR PERIOD (EOL INDICATOR)
+017- 0014F 000000            TERM    WORD    0           .TERM FOR A DIGIT OF A LINE
+018- 00152 000000            ADIGIT  WORD    0           .ASCII VALUE OF CHARACTER IN LINE
+019- 00155 000000            LINEPOS WORD    0           .LINE CHAR POSITION WHILE CONVERTING
+020- 00158 000000            TEMP    WORD    0           .TEMPORARY STORE USED FOR FLIPPING
+021- 0015B 000000            SWAPEND WORD    0           .END MARKER FOR SWAPPING
+022- 0015E 000000            SWAPST  WORD    0           .BEGINNING MARKER FOR SWAPPING
+023- 00161 000000            SWAPS   WORD    0           .NUMBER OF SWAPS TO PERFORM
+024-                         ..........
+025-                         . ASCII VALUES FOR DIGITS 0-9 
+026-                         ..........
+027- 00164 000030            AZERO   WORD    48
+028- 00167 000031            AONE    WORD    49
+029- 0016A 000032            ATWO    WORD    50
+030- 0016D 000033            ATHREE  WORD    51
+031- 00170 000034            AFOUR   WORD    52
+032- 00173 000035            AFIVE   WORD    53
+033- 00176 000036            ASIX    WORD    54
+034- 00179 000037            ASEVEN  WORD    55
+035- 0017C 000038            AEIGHT  WORD    56
+036- 0017F 000039            ANINE   WORD    57
+037- 00182 050000            BEGIN   LDX     #0          .SET INDEX TO 0
+038- 00185 6D0000                    LDS     #0          .SET LINE CHARACTER COUNT TO 0
+039- 00188 010000                    LDA     #0          .SET A TO 0
+040-                         ..........
+041-                         . BEGIN READING INPUT FILE
+042-                         ..........
+043- 0018B E32F75            READ    TD      INPUT       .TEST IF INPUT DEVICE IS READY
+044- 0018E 332FFA                    JEQ     READ        .CONTINUE LOOPING UNTIL INPUT DEVICE IS READY
+045- 00191 DB2F6F                    RD      INPUT       .READ BYTE FROM INPUT
+046- 00194 2B2FB2                    COMP    LF          .IS INPUT BYTE A LINE FEED?
+047- 00197 33201D                    JEQ     INCTINT     .DONE READING LINE, CONVERT PARIN TO NUMBER
+048- 0019A 2B2FAF                    COMP    PERIOD      .IS INPUT BYTE A PERIOD?
+049- 0019D 33210B                    JEQ     REVERSE     .WE'RE DONE WITH THE FILE! BEGIN REVERSING THE LIST
+050- 001A0 0FAF82                    STA     PARIN,X     .STORE READ WORD INTO PARIN[X]
+051- 001A3 010001                    LDA     #1
+052- 001A6 9004                      ADDR    A,S         .INCREMENT LINE CHARACTER COUNT BY 1
+053- 001A8 7F2F9B                    STS     CHARCNT     .STORE S IN CHARCNT
+054- 001AB 2F2F95                    TIX     ENDLP       .INCREMENT X BY 3 (PROBABLY BETTER WAY TO DO THIS, BUT IT WORKS FOR NOW)
+055- 001AE 2F2F92                    TIX     ENDLP
+056- 001B1 2F2F8F                    TIX     ENDLP
+057- 001B4 3B2FD4                    JLT     READ        .READ NEXT CHARACTER IN LINE
+058-                         . INITIALIZATION FOR CONVERTING LINE
+059- 001B7 032F68            INCTINT LDA     TINTS       .LOAD TINTS INTO A
+060- 001BA 190001                    ADD     #1          .ADD 1 TO A
+061- 001BD 0F2F62                    STA     TINTS       .STORE NEW VALUE INTO A
+062- 001C0 1D0001                    SUB     #1          .SUBTRACT A BY 1 
+063- 001C3 210003                    MUL     #3          .MULTIPLY BY ONE FOR PROPER OFFSET
+064- 001C6 AC01                      RMO     A,X         .LOAD A INTO X (TINTS - 1)
+065- 001C8 03AF39                    LDA     INTS,X      .LOAD INTS[X] INTO A
+066- 001CB 190001                    ADD     #1          .ADD 1 TO A (UNINITIALIZED VALUES START AT -1)
+067- 001CE 0FAF33                    STA     INTS,X      .STORE VALUE BACK INTO INTS[X]
+068- 001D1 050000                    LDX     #0          .INITIALIZE X TO 0
+069- 001D4 010000                    LDA     #0          .LOAD 0 INTO A
+070- 001D7 0F2F7B                    STA     LINEPOS     .STORE 0 INTO LINEPOS, CLEARING IT OUT
+071- 001DA 032F69            CONVERT LDA     CHARCNT     .PLACE CHAR COUNT IN A
+072- 001DD 1D0001                    SUB     #1          .DECREASE CHAR COUNT BY 1
+073- 001E0 0F2F63                    STA     CHARCNT     .PLACE BACK INTO CHARCNT
+074- 001E3 6F2F60                    LDS     CHARCNT     .LOAD CHARCNT INTO S
+075- 001E6 290000                    COMP    #0          .IS A LESS THAN 0?
+076- 001E9 3B2F96                    JLT     BEGIN       .DONE CONVERTING NUMBER, START READING NEXT LINE
+077- 001EC 03AF36                    LDA     PARIN,X     .COPY PARIN[X] INTO A
+078-                         ..........
+079-                         . COMPARE AND ASSIGN DIGITS BASED ON ASCII VALUES
+080-                         ..........
+081- 001EF 2B2F72                    COMP    AZERO
+082- 001F2 332036                    JEQ     ISZERO
+083- 001F5 2B2F6F                    COMP    AONE
+084- 001F8 332036                    JEQ     ISONE
+085- 001FB 2B2F6C                    COMP    ATWO
+086- 001FE 332036                    JEQ     ISTWO
+087- 00201 2B2F69                    COMP    ATHREE
+088- 00204 332036                    JEQ     ISTHREE
+089- 00207 2B2F66                    COMP    AFOUR
+090- 0020A 332036                    JEQ     ISFOUR
+091- 0020D 2B2F63                    COMP    AFIVE
+092- 00210 332036                    JEQ     ISFIVE
+093- 00213 2B2F60                    COMP    ASIX
+094- 00216 332036                    JEQ     ISSIX
+095- 00219 2B2F5D                    COMP    ASEVEN
+096- 0021C 332036                    JEQ     ISSEVEN
+097- 0021F 2B2F5A                    COMP    AEIGHT
+098- 00222 332036                    JEQ     ISEIGHT
+099- 00225 2B2F57                    COMP    ANINE
+100- 00228 332036                    JEQ     ISNINE
+101- 0022B 010000            ISZERO  LDA     #0
+102- 0022E 3F2036                    J       MULTI
+103- 00231 010001            ISONE   LDA     #1
+104- 00234 3F2030                    J       MULTI
+105- 00237 010002            ISTWO   LDA     #2
+106- 0023A 3F202A                    J       MULTI
+107- 0023D 010003            ISTHREE LDA     #3
+108- 00240 3F2024                    J       MULTI
+109- 00243 010004            ISFOUR  LDA     #4
+110- 00246 3F201E                    J       MULTI
+111- 00249 010005            ISFIVE  LDA     #5
+112- 0024C 3F2018                    J       MULTI
+113- 0024F 010006            ISSIX   LDA     #6
+114- 00252 3F2012                    J       MULTI
+115- 00255 010007            ISSEVEN LDA     #7
+116- 00258 3F200C                    J       MULTI
+117- 0025B 010008            ISEIGHT LDA     #8
+118- 0025E 3F2006                    J       MULTI
+119- 00261 010009            ISNINE  LDA     #9
+120- 00264 3F2000                    J       MULTI
+121-                         ..........
+122-                         . CALCULATE VALUE BASED ON DIGIT POSITION
+123-                         ..........
+124- 00267 0F2EE5            MULTI   STA     TERM    .STORE DIGIT IN A INTO TERM
+125-                         . MULTIPLIES NUMBER A SET NUMBER OF TIMES BASED ON POSITION
+126- 0026A 032ED9            EXPON   LDA     CHARCNT .LOAD STORED CHAR COUNT INTO A
+127- 0026D 290000                    COMP    #0      .IS THE CHARCNT DOWN TO ZERO?
+128- 00270 332012                    JEQ     ADDDIGI .JUMP TO ADDDIGI
+129- 00273 1D0001                    SUB     #1      .SUBTRACT 1 FROM A
+130- 00276 0F2ECD                    STA     CHARCNT .STORE NEW CHAR COUNT
+131- 00279 032ED3                    LDA     TERM    .BRING TERM BACK INTO A
+132- 0027C 21000A                    MUL     #10     .MULTIPLY A BY 10
+133- 0027F 0F2ECD                    STA     TERM    .PLACE A BACK INTO TERM
+134- 00282 3F2FE5                    J       EXPON   .JUMP BACK UP AND MULTIPLY AGAIN
+135-                         . ADDS CALCULATED VALUE INTO INT POSITION
+136- 00285 032E9A            ADDDIGI LDA     TINTS   .LOAD TINTS INTO A
+137- 00288 1D0001                    SUB     #1      .SUBTRACT BY 1
+138- 0028B 210003                    MUL     #3      .MULTIPLY BY 3 FOR PROPER OFFSET
+139- 0028E AC01                      RMO     A,X     .MOVE VALUE INTO X
+140- 00290 032EBC                    LDA     TERM    .BRING FINAL TERM BACK
+141- 00293 1BAE6E                    ADD     INTS,X  .ADD A INTO INTS[X]
+142- 00296 0FAE6B                    STA     INTS,X  .STORE A INTO INTS[X]
+143- 00299 7F2EAA                    STS     CHARCNT .PLACE S INTO CHARCNT
+144- 0029C 032EB6                    LDA     LINEPOS .LOAD CURRENT LINE POSITION INTO A
+145- 0029F 190003                    ADD     #3      .INCREMENT BY THREE
+146- 002A2 0F2EB0                    STA     LINEPOS .STORE BACK INTO LINEPOS
+147- 002A5 072EAD                    LDX     LINEPOS .LOAD VALUE INTO X
+148- 002A8 3F2F2F                    J       CONVERT .CONVERT THE NEXT DIGIT
+149-                         ..........
+150-                         . REVERSE THE INT LIST
+151-                         ..........
+152- 002AB 032E74            REVERSE LDA     TINTS   .LOAD TINTS INTO A
+153- 002AE 250002                    DIV     #2      .DIVIDE BY TWO
+154- 002B1 0F2EAD                    STA     SWAPS   .STORE RESULT INTO SWAPS
+155- 002B4 032E6B                    LDA     TINTS   .LOAD TOTAL NUMBER OF INTS AGAIN
+156- 002B7 1D0001                    SUB     #1      .SUBTRACT BY ONE...
+157- 002BA 210003                    MUL     #3      . ...AND MULTIPLY BY 3 TO USE
+158- 002BD 0F2E9B                    STA     SWAPEND .STORE THE VALUE FOR THE END POSITION
+159-                         . MAIN SWAPPING FUNCTION
+160- 002C0 072E9B            SWAP    LDX     SWAPST  .LOAD START POSITION INTO X
+161- 002C3 03AE3E                    LDA     INTS,X  .LOAD START INT[X] VALUE INTO A
+162- 002C6 0F2E8F                    STA     TEMP    .STORE A INTO TEMP WORD
+163- 002C9 072E8F                    LDX     SWAPEND .LOAD END POSITION INTO X
+164- 002CC 03AE35                    LDA     INTS,X  .LOAD END INT[X] VALUE INTO A
+165- 002CF 072E8C                    LDX     SWAPST  .LOAD START POSITION INTO X AGAIN
+166- 002D2 0FAE2F                    STA     INTS,X  .STORE  END INT[X] VALUE INTO FRONT
+167- 002D5 032E80                    LDA     TEMP    .LOAD VALUE STORED IN TEMP INTO A
+168- 002D8 072E80                    LDX     SWAPEND .LOAD END POSITION BACK INTO X
+169- 002DB 0FAE26                    STA     INTS,X  .FINALLY, STORE TEMP VALUE INTO THE END POSITION
+170- 002DE 032E80                    LDA     SWAPS   .LOAD NUMBER OF SWAPS
+171- 002E1 1D0001                    SUB     #1      .SUBTRACT BY ONE
+172- 002E4 0F2E7A                    STA     SWAPS   .STORE NEW VALUE BACK INTO SWAPS
+173- 002E7 032E74                    LDA     SWAPST  .LOAD START POSITION...
+174- 002EA 190003                    ADD     #3      . ...AND MOVE IT TOWARD THE END
+175- 002ED 0F2E6E                    STA     SWAPST  .SAVE IT BACK INTO SWAPST
+176- 002F0 032E68                    LDA     SWAPEND .LOAD END POSITION...
+177- 002F3 1D0003                    SUB     #3      . ...AND MOVE IT TOWARD THE FRONT
+178- 002F6 0F2E62                    STA     SWAPEND .SAVE IT BACK INTO SWAPEND
+179- 002F9 032E65                    LDA     SWAPS   .LOAD SWAPS VALUE AGAIN
+180- 002FC 290000                    COMP    #0      .IS IT ZERO?
+181- 002FF 372FBE                    JGT     SWAP    .IF IT'S NOT, CONTINUE SWAPPING. OTHERWISE, WE'RE DONE! HORRAY!
+182- 00302 4F0000            DONE    RSUB
+183- 00305                           END

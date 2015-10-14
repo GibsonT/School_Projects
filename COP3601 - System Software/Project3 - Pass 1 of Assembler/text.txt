@@ -1,0 +1,31 @@
+Project 3 - Pass 1 of the SIC/XE Assembler
+Author: Travis Gibson
+n-number: n00921652
+
+Purpose: The purpose of this project is to start programming the SIC/XE assembler,
+starting with pass 1. Pass 1 consists of creating the listing file of the SIC program,
+inserting labels within the program into a symbol table, and checking for certain errors
+such as duplicate labels and invalid mneumonics. 
+
+My approach is pretty straightforward. I first load all supported mneumonics and 
+assembler directives into their own symbol table using an 'ops.dat' file that contains
+the mneumonic (the original, '*', and '+' versions) along with their opcode and sizes. I then 
+read the source file line by line and load each component of each statement 
+(label, mneumonic, mneumonic prefix, etc.) into their own variables for processing and error checking.
+Assuming there's no errors with the statement, such as a duplicate label, I reprint the line, formatted
+and with the calculated address of the statement.
+
+I've tried to implement a few features for anticipation of pass 2, such as the nixbpe flags and
+loading the opcodes of the mneumonics.
+
+Files Included With Project:
+* main.cpp
+* hashtable.cpp
+* hashtable.h
+* linkedlist.cpp
+* linkedlist.h
+* element.h
+* ops.dat
+
+Files Output By Program:
+* *.lst (filename determined by input filename. Ex. codeFile input will result in codeFile.lst) 

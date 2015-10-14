@@ -1,0 +1,24 @@
+          START    100
+          J        DN
+FIRST     WORD     10
+SEC       WORD     8
+THRD      WORD     12
+BIG       RESW     1
+DN        LDA      =C'TEST' 
+          COMP     SEC    
+          JGT      LRG   
+          COMP     THRD   
+          JGT      TBTF  
+          STA      BIG  
+          J        DONE  
+LRG       LDA      SEC
+LRG       J        FIRST
+          COMP     THRD  
+          JGT      SBTD  
+TBTF      LDA      THRD  
+          STA      BIG
+          J        DONE  
+SBTD      LDA      SEC
+          STA      BIG
+DONE      RSUB
+          END

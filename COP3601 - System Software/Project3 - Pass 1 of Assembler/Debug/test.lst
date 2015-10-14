@@ -1,0 +1,39 @@
+100              START    100     
+100              J        DN      
+103     FIRST    WORD     10      
+106     SEC      WORD     8       
+109     THRD     WORD     12      
+10c     BIG      RESW     1       
+10f     DN       LDA      =C'TEST'
+112              COMP     SEC     
+115              JGT      LRG     
+118              COMP     THRD    
+11b              JGT      TBTF    
+11e              STA      BIG     
+121              J        DONE    
+124     LRG      LDA      SEC     
+ ***ERROR: NO MNEUMONIC DECLARED***
+127              COMP     THRD    
+12a              JGT      SBTD    
+12d     TBTF     LDA      THRD    
+130              STA      BIG     
+133              J        DONE    
+136     SBTD     LDA      SEC     
+139              STA      BIG     
+13c     DONE     RSUB             
+13f              END              
+
+
+Symbol Table
+==============================
+Hash	Mneumonic	Address
+==============================
+1       SBTD        136
+4       LRG         124
+4       TBTF        12d
+6       THRD        109
+10      BIG         10c
+17      FIRST       103
+19      SEC         106
+19      DONE        13c
+21      DN          10f

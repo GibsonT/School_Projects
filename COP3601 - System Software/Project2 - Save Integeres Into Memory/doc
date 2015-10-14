@@ -1,0 +1,40 @@
+Travis Gibson
+n00921652
+COP3601, System Software
+Project 2
+
+    The purpose of this project is to create a SIC or SIC/XE program that takes
+in 10 integers and flips their order. I implemented the ability to
+insert a list via an input file. This file contains an arbitrary list of
+integers, each separated by a newline. When done inputting numbers in the
+file, there should be a period at the end. 
+
+Example input:
+~~~~~~
+1
+2
+3
+23
+43
+100
+.
+~~~~~~
+
+    The limit is hard coded to 10 integers with a 10 digit limit, but
+this may easily be edited within the source file by editing the
+TINTS, PARIN, and ENDLP variables. This was achieved
+by reading each line byte by byte, converting the ASCII value to
+a read digit. Each digit is multiplied by 10 a number of times
+based on its position in the line, and then added to the
+total for that line.
+
+    For reversing the list, I essentialy just used a temporary
+variable as a holder, much like one would do in C. I then 
+transverse the list using two markers that move back from the front,
+and toward the front from the back, and swap the integers where the
+markers are at. The markers are then incremented/decremented once each
+iteration.
+
+    The list of integers are stored in memory locations 104-122, and in
+sic.log, I have two dumps from 100-200 showing the contents of the memory
+both before and after the swap.
